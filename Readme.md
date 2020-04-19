@@ -23,7 +23,12 @@ The Action is the output of the TD3 model is one value which represent the angle
 Further I would have wanted to add the speed as another action parameter that should be predicted by the TD3 model.
 
 ### Rewards:
-The rewards play a key role in how an agent learns using reinforcement. 
+The rewards play a key role in how an agent learns using reinforcement. The reward system of Assignment 7 is reused, although I tried different reward systems. But it can definitely be improved. Currently there are different rewards given to different results of the action. The exact value of the reward may not matter as much as the proportion of the reward given to each scenario. It may take an approach like grid search to reach a good reward system.
+- A high positive reward and done-episode for reaching the goal.
+- A high negative reward/done-episode for hitting the wall
+- A positive reward for staying on the road
+- A negative reward for staying on the sand
+- A small negative reward for staying alive
 
 ### Results:
 The Car moves properly while taking random actions. Once the TD3 model is used to predict the action the car just spins in one place. I suspect that resizing the cropped sand image to 28x28 is diminishing the information. The alternative solution is mentioned in the CNN features section earlier.
