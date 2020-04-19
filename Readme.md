@@ -1,5 +1,7 @@
 # Self Driving car using Kivy and TD3
 
+[![Alt text](https://img.youtube.com/vi/SO3KbC9EGHw/0.jpg)](https://www.youtube.com/watch?v=SO3KbC9EGHw)
+
 ### GameMain.py:
 This is the main py file. Here the kivy environment of Assignment 7 was modified to use the T3D to drive the car on the map.
 The car is initialized in a random positions. 
