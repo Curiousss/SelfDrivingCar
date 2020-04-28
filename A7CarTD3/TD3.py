@@ -1,31 +1,13 @@
-import os
-import time
-import random
-import numpy as np
-import matplotlib.pyplot as plt
-import pybullet_envs
-import gym
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
-from gym import wrappers
-from torch.autograd import Variable
-from collections import deque
-
 #Sess10
 from TD3_NN import Actor, Critic
 
 # ## Steps 4 to 15: Training Process
-
-
 # Selecting the device (CPU or GPU)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-#Sess10: Modified
-# device = torch.device("cuda")
-
 # Building the whole Training Process into a class
-
 class TD3(object):
 
     def __init__(self, state_dim, action_dim, max_action):
@@ -40,33 +22,47 @@ class TD3(object):
         self.max_action = max_action
 
     def select_action(self, state):
-        state = torch.Tensor(state.reshape(1, -1)).to(device)
+        #TODO Meera state = torch.Tensor(state.reshape(1, -1)).to(device)
+        state_tensor1 = torch.Tensor(state[0]).to(device)
+        state_tensor2 = torch.Tensor(state[1]).to(device)
+        state_tensor1 = state_tensor1.unsqueeze(0)
+        state_tensor2 = state_tensor2.unsqueeze(0)
+        state_tensor = [state_tensor1, state_tensor2]
 
         # Modified by Sess10. Changed from cpu to gpu
         # return self.actor(state).to(device).data.numpy().flatten()
-        return self.actor(state).cpu().data.numpy().flatten()
+        output = self.actor(state_tensor)
+        output = output.cpu()
+        action = output.data.numpy().flatten()
+        print("Select Action", action)
+        return action
 
-    def train(self, replay_buffer, iterations, batch_size=100, discount=0.99, tau=0.005, policy_noise=0.2,
+    def train(self, replay_buffer, iterations, batch_size = 16, discount=0.99, tau=0.005, policy_noise=0.2,
               noise_clip=0.5, policy_freq=2):
 
         for it in range(iterations):
 
             # Step 4: We sample a batch of transitions (s, s’, a, r) from the memory
-            batch_states, batch_next_states, batch_actions, batch_rewards, batch_dones = replay_buffer.sample(
-                batch_size)
-            state = torch.Tensor(batch_states).to(device)
-            next_state = torch.Tensor(batch_next_states).to(device)
+            #batch_states, batch_next_states, batch_actions, batch_rewards, batch_dones = replay_buffer.sample(
+            #    batch_size)
+            batch_states1, batch_states2, batch_next_states1, batch_next_states2, \
+            batch_actions, batch_rewards, batch_dones = replay_buffer.sample(batch_size)
+
+            state = [torch.Tensor(batch_states1).to(device), torch.Tensor(batch_states2).to(device)]
+            next_state = [torch.Tensor(batch_next_states1).to(device), torch.Tensor(batch_next_states2).to(device)]
             action = torch.Tensor(batch_actions).to(device)
             reward = torch.Tensor(batch_rewards).to(device)
             done = torch.Tensor(batch_dones).to(device)
 
             # Step 5: From the next state s’, the Actor target plays the next action a’
             next_action = self.actor_target(next_state)
+            #print("TD3 Action", next_action)
 
             # Step 6: We add Gaussian noise to this next action a’ and we clamp it in a range of values supported by the environment
             noise = torch.Tensor(batch_actions).data.normal_(0, policy_noise).to(device)
             noise = noise.clamp(-noise_clip, noise_clip)
             next_action = (next_action + noise).clamp(-self.max_action, self.max_action)
+            #print("TD3 Action shape", next_action.shape)
 
             # Step 7: The two Critic targets take each the couple (s’, a’) as input and return two Q-values Qt1(s’,a’) and Qt2(s’,a’) as outputs
             target_Q1, target_Q2 = self.critic_target(next_state, next_action)
@@ -77,6 +73,7 @@ class TD3(object):
             # Step 9: We get the final target of the two Critic models, which is: Qt = r + γ * min(Qt1, Qt2), where γ is the discount factor
             target_Q = reward + ((1 - done) * discount * target_Q).detach()
 
+            #print("Action Critic to Model", action.shape)
             # Step 10: The two Critic models take each the couple (s, a) as input and return two Q-values Q1(s,a) and Q2(s,a) as outputs
             current_Q1, current_Q2 = self.critic(state, action)
 

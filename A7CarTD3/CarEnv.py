@@ -9,12 +9,8 @@
 '''
 
 # Importing the libraries
-import gym
 import numpy as np
-from random import random, randint
-import matplotlib.pyplot as plt
-import time
-from random import randint
+import random
 
 # Importing the Kivy packages
 from kivy.app import App
@@ -28,14 +24,9 @@ from kivy.clock import Clock
 from kivy.core.image import Image as CoreImage
 from PIL import Image as PILImage
 from kivy.graphics.texture import Texture
-
-# Importing the Dqn object from our AI in ai.py
-# from ai import Dqn
-
 from CarWidget import Car as car
-from gym import spaces
 
-class CarEnv(gym.Env):
+class CarEnv:
     # class CarEnv():
     '''
 
@@ -59,30 +50,25 @@ class CarEnv(gym.Env):
     # angle -1 to 1, velocity 0 to 1
     # low = np.array([-1, 0])  # Equivalent of -180 degree . low = np.array([-180])
     # high = np.array([1, 1])  # Equivalent of +180 degree. low = np.array([+180])
-    low = np.array([-1])  # Equivalent of -180 degree . low = np.array([-180])
-    high = np.array([1])  # Equivalent of +180 degree. This is also the value of max_action
-    action_space = spaces.Box(low, high)
-
-
-
-    # action_dim = env.action_space.shape[0]  # 1
-    # max_action = float(env.action_space.high[0])  # 1.0
-
-
+    low = -1  # Equivalent of -180 degree . low = np.array([-180])
+    high = 1  # Equivalent of +180 degree. This is also the value of max_action
     max_rotation_angle = 20  #Max can be 180 degrees
     # max_velocity = 4
     # Sess10: TD3 Variable declaration by Sess10 ENDS
 
     # Size of the area to be cropped around the Car
-    # pixel_crop_size = (100, 100)
     pixel_crop_size = (160, 160) #Note: To be give in even numbers
-
     # env_width = 975
     # env_height = 548
     #Sess10: Method added by Sess10
 
     def __init__(self):
-        super(CarEnv, self).__init__()
+        return
+    #    super(CarEnv, self).__init__()
+
+    # TOdo Meera Implementing gy, env.sample here.
+    def sample():
+        return [random.uniform(-1,1)]
 
     #NOTE: self is the context of the calling class which is the Game class here
     def reset(self):
@@ -92,12 +78,7 @@ class CarEnv(gym.Env):
                 I think one reason to declare these variables global so that they are available across the classes of Kivy
                 Other reason could be to have singleton pattern
         '''
-
         # START OF THE LIST OF VARIABLES DECLARATION---------------
-
-        global brain
-        global scores
-
         global last_reward
         global last_distance
         global action2rotation
@@ -114,21 +95,17 @@ class CarEnv(gym.Env):
 
         global first_update
 
-
         # END OF LIST OF VARIABLES DECLARATION---------------
 
         # Intializing the Environment variables
-        # brain = Dqn(5,3,0.9)  #Brain is not a part of the Game Env hence not initializing here.
         # scores = [] #This is used to Track the cumulative score to exit the game. This can also be taken out of the environment class
 
         last_reward = 0
         last_distance = 0
         # action2rotation = [0, 5, -5]  # Since, this is CONSTANT, this taken out from reset method
         # action2rotation = [0, 10, -10]  # Since, this is CONSTANT, this taken out from reset method
-
         # textureMask = CoreImage(source="./kivytest/simplemask1.png")
         im = CoreImage("./images/MASK1.png")
-        # im = CoreImage("./images/mask.png")
 
         # Attributes of of Game(Widget) class. Can be Hardcoded or Passed as an arg to reset() method
         longueur = self.width
@@ -168,11 +145,7 @@ class CarEnv(gym.Env):
 
         #Gathering the parameters for Training
         last_reward, episode_over = CarEnv.get_reward(self)
-        # state = CarEnv.get_state(self) #last_signal is the state
-
-        #Additional Parameter added by Sess10 for pixel based learning using DCQN
         pixel_state = CarEnv.get_state(self) #last_signal is the state
-
         episode_over = False
 
         return pixel_state, last_reward, episode_over, {}
@@ -250,7 +223,7 @@ class CarEnv(gym.Env):
             # self.car.velocity = Vector(4, 0).rotate(self.car.angle)
             #Sess10: reversing the velocity of the Sand vs Road inorder to increase the Road Transitions
             self.car.velocity = Vector(2, 0).rotate(self.car.angle)
-            last_reward = -0.1  # Make a positive reward
+            last_reward = 1  # Make a positive reward
             # last_reward = 8
 
             # print(0, goal_x, goal_y, distance, int(self.car.x), int(self.car.y),
@@ -264,7 +237,7 @@ class CarEnv(gym.Env):
 
             # if distance < self.last_distance:
             if distance < last_distance:
-                last_reward = 0.5
+                last_reward = 1 #Todo Meera
                 # last_reward += 10
                 # last_reward += 0.1
             # else:
@@ -337,24 +310,21 @@ class CarEnv(gym.Env):
 
         return last_reward, episode_over
 
-
-
-
-    # Sess10: Method aded by Sess10 to bring in line with gym.env
     def take_action(self, action):
         # This takes the action as input, performs the action and returns the reward
+        print("action", action)
 
         # rotation = action2rotation[action]  # Actually, this rotation is the action, I can do this inside step method also
 
         # type action value is: <class 'numpy.ndarray'> with float value between -1 and  +1 e.g. 119.7109580039978
         rotation = action[0] * CarEnv.max_rotation_angle  # max_rotation_angle = 180 degrees
-        rotation = float(rotation) # Rounding it to one decimal place. TBD: Float values are not working somehow
+        #TOdo: Meera Take this rotation = float(rotation) # Rounding it to one decimal place. TBD: Float values are not working somehow
 
         # Sess10: Below six lines are helping the Car to move  -- angle and
         self.car.pos = Vector(*self.car.velocity) + self.car.pos
-        self.car.rotation = rotation
-        self.car.angle = (self.car.angle + self.car.rotation)%360  # Sess10: This needs to be corrected. Modified 18th Apr
-        print("ROtation", rotation)
+        self.car.rotation = float(rotation)
+        self.car.angle = (self.car.angle + self.car.rotation) # Sess10: This needs to be corrected. Modified 18th Apr
+        #print("ROtation", rotation)
         print("Angle", self.car.angle)
 
 
@@ -372,18 +342,14 @@ class CarEnv(gym.Env):
         global episode_over
 
         # return ob, reward, episode_over, {}  #ob, reward, episode_over, info : tuple
-
         old_action = action
         # action = [0] * NUM_ACTIONS  #Not required
-
         # Let it also accept a list of actions and put the same validation logic as in DOOM class
-
         last_reward, episode_over = CarEnv.take_action(self, action)  # This method should return the last_reward. distance is not required as reward is based on distance
         # last_reward = self.car.get_reward()  #This step is not required as getting the reward from take action itself
         # state, pixel_state = CarEnv.get_state(self)  # gives the current state of the env and agent
         pixel_state = CarEnv.get_state(self)  # gives the current state of the env and agent
         # Sess10: Make it same as self.game.get_state()
-
         # episode_over = False
         # print("Sess10 CarEnv step: type(last_reward) is : ", type(last_reward))
         # print("Sess10 CarEnv step: The last_reward is : ", last_reward)
@@ -399,7 +365,6 @@ class CarEnv(gym.Env):
         #                               int(self.car.sensor2_y) - 10:int(self.car.sensor2_y) + 10])) / 400.
         # self.car.signal3 = int(np.sum(sand[int(self.car.sensor3_x) - 10:int(self.car.sensor3_x) + 10,
         #                               int(self.car.sensor3_y) - 10:int(self.car.sensor3_y) + 10])) / 400.
-
         # Sess10: Forget about the below lines as of now
         # if self.car.sensor1_x > longueur - 10 or self.car.sensor1_x < 10 or self.car.sensor1_y > largeur - 10 or self.car.sensor1_y < 10:
         #     self.car.signal1 = 10.
@@ -415,34 +380,20 @@ class CarEnv(gym.Env):
         yy = goal_y - self.car.y
         orientation = Vector(*self.car.velocity).angle((xx, yy)) / 180.
 
-
-
+        # Todo: Meera
         # last_signal = [self.car.signal1, self.car.signal2, self.car.signal3, orientation, -orientation] # state
+        last_signal = [self.car.x, self.car.y, xx, yy, *self.car.velocity, self.car.angle] # state
 
         # crop area 20x20
-        rows = CarEnv.pixel_crop_size[0] #100
-        columns = CarEnv.pixel_crop_size[1] #100
+        rows = CarEnv.pixel_crop_size[0]
+        columns = CarEnv.pixel_crop_size[1]
 
         pixel_state = sand [int(self.car.x) - rows//2:int(self.car.x) + rows//2, int(self.car.y) - columns//2:int(self.car.y) + columns//2]
         # pixel_state = sand [int(self.car.x) - 10:int(self.car.x) + 10, int(self.car.y) - 10:int(self.car.y) + 10]
         # Need not worry about map boundry scenario as car is always kept 50 pixels away from the boundry in the get_reward function
+        pixel_state = np.resize(pixel_state, (1, 40, 40))
+        print("last_signal", last_signal)
 
-        # delete the below
-        from pathlib import Path
-        from PIL import Image
-        temp_path = Path(
-            r"D:\PyCharmProjects\FaceRecognition_Assignment_TSAI\REINFORCEMENT_LEARNING\EVA_Assignment_P2S10\CarEnv_DCQN_WIP_NJ\TD3_rewriting\temp\D:\PyCharmProjects\FaceRecognition_Assignment_TSAI\REINFORCEMENT_LEARNING\EVA_Assignment_P2S10\CarEnv_DCQN_WIP_NJ\TD3_rewriting\temp\fromCarEnv")
+        full_state = [pixel_state, last_signal]
+        return full_state
 
-        # global total_timesteps
-        #
-        # # temp_pixel_State = pixel_state * 255
-        # new_state_img = Image.fromarray(np.uint8(pixel_state*255))
-        # new_state_img = new_state_img.convert("L")  # To solve error in .save: cannot write mode F as JPEG
-        # img_file_name = str(total_timesteps) + ".jpg"
-        # new_state_img.save(temp_path / img_file_name)
-
-
-        # delete the above
-
-        # return last_signal, pixel_state
-        return pixel_state

@@ -8,14 +8,6 @@
     @maintainer = "Sess102020"
 '''
 
-# Importing the libraries
-import gym
-import numpy as np
-from random import random, randint
-import matplotlib.pyplot as plt
-import time
-from random import randint
-
 # Importing the Kivy packages
 from kivy.app import App
 from kivy.uix.widget import Widget
@@ -50,7 +42,6 @@ class Car(Widget):
 
     angle = NumericProperty(0.0)
     rotation = NumericProperty(0.0)
-
 
     velocity_x = NumericProperty(0.0)
     velocity_y = NumericProperty(0.0)
