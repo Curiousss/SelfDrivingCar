@@ -65,9 +65,6 @@ class Game(Widget):
     goal3 = ObjectProperty(None)
 
     def serve_car(self):
-
-        # '975') # 100 --875
-        # '548') # 100 -- 448
         # init_x = np.random.randint(10, 100)
         # init_y = np.random.randint(10, 100)
 

@@ -51,13 +51,9 @@ class CarEnv:
     low = -1  # Equivalent of -180 degree . low = np.array([-180])
     high = 1  # Equivalent of +180 degree. This is also the value of max_action
     max_rotation_angle = 20  #Max can be 180 degrees
-    # Sess10: TD3 Variable declaration by Sess10 ENDS
 
     # Size of the area to be cropped around the Car
     pixel_crop_size = (160, 160) #Note: To be give in even numbers
-    # env_width = 975
-    # env_height = 548
-    #Sess10: Method added by Sess10
 
     def __init__(self):
         return
@@ -79,17 +75,13 @@ class CarEnv:
         global last_reward
         global last_distance
         global action2rotation
-
         global longueur
         global largeur
-
         global im # a variable specifically to read the pixels from the env
         global sand
-
         global goal_x
         global goal_y
         global swap
-
         global first_update
 
         # END OF LIST OF VARIABLES DECLARATION---------------
@@ -119,23 +111,16 @@ class CarEnv:
         goal_x = 430
         goal_y = 323  # 548 - 262
 
-        # '975') # 100 --875
-        # '548') # 100 -- 448
         init_x = np.random.randint(100, 675)
         init_y = np.random.randint(100, 440)
         self.car.x = init_x
         self.car.y = init_y
 
-        # kivy file parameters
-        # < Goal1 >: 892, 300
-        # < Goal2 >: 430, 323
-        # < Goal3 >: 105, 397
-
         # NOTE: self is the context of the calling class which is the Game class here
-        # print('self.goal1.x :', self.goal1.x)  #   self.goal1.x : 477.5
-        # print('self.goal1.y :', self.goal1.y)  #   self.goal1.y : 264
-        # print('self.width :', self.width)  #   975
-        # print('self.height :', self.height)  #   548
+        # print('self.goal1.x :', self.goal1.x)
+        # print('self.goal1.y :', self.goal1.y)
+        # print('self.width :', self.width)
+        # print('self.height :', self.height)
 
         swap = 0
         first_update = True
@@ -302,7 +287,6 @@ class CarEnv:
                 swap = 0
                 # last_reward = 5
 
-        # print("Sess10 CarEnv last_reward: type(last_reward) is : ", type(last_reward))
         # print("Sess10 CarEnv last_reward: type(last_reward) is : ", last_reward)
 
         return last_reward, episode_over

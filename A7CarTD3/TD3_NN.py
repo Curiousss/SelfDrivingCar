@@ -1,13 +1,6 @@
-import os
-import time
-import random
-import numpy as np
-import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.autograd import Variable
-from collections import deque
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
