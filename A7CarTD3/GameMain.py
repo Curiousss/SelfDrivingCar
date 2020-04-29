@@ -287,7 +287,9 @@ class Game(Widget):
 
                 else:
                     # action = policy.select_action(np.array(obs))
+
                     action = policy.select_action(obs) #Todo Meera np.array(obs))
+
                     # If the explore_noise parameter is not 0, we add noise to the action and we clip it
                     if expl_noise != 0:
                         action = (action + np.random.normal(0, expl_noise, size=None)).clip(env.low, env.high)

@@ -31,10 +31,11 @@ class TD3(object):
 
         # Modified by Sess10. Changed from cpu to gpu
         # return self.actor(state).to(device).data.numpy().flatten()
+        self.actor.eval()  # TODO Meera Needed for batch norm
         output = self.actor(state_tensor)
+        self.actor.train()
         output = output.cpu()
         action = output.data.numpy().flatten()
-        print("Select Action", action)
         return action
 
     def train(self, replay_buffer, iterations, batch_size = 16, discount=0.99, tau=0.005, policy_noise=0.2,

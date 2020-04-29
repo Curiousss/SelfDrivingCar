@@ -48,12 +48,9 @@ class CarEnv:
 
     # Car Steering wheel has one degree of freedom
     # angle -1 to 1, velocity 0 to 1
-    # low = np.array([-1, 0])  # Equivalent of -180 degree . low = np.array([-180])
-    # high = np.array([1, 1])  # Equivalent of +180 degree. low = np.array([+180])
     low = -1  # Equivalent of -180 degree . low = np.array([-180])
     high = 1  # Equivalent of +180 degree. This is also the value of max_action
     max_rotation_angle = 20  #Max can be 180 degrees
-    # max_velocity = 4
     # Sess10: TD3 Variable declaration by Sess10 ENDS
 
     # Size of the area to be cropped around the Car
@@ -323,7 +320,7 @@ class CarEnv:
         # Sess10: Below six lines are helping the Car to move  -- angle and
         self.car.pos = Vector(*self.car.velocity) + self.car.pos
         self.car.rotation = float(rotation)
-        self.car.angle = (self.car.angle + self.car.rotation) # Sess10: This needs to be corrected. Modified 18th Apr
+        self.car.angle = (self.car.angle + self.car.rotation) % 360# Sess10: This needs to be corrected. Modified 18th Apr
         #print("ROtation", rotation)
         print("Angle", self.car.angle)
 
@@ -392,6 +389,9 @@ class CarEnv:
         # pixel_state = sand [int(self.car.x) - 10:int(self.car.x) + 10, int(self.car.y) - 10:int(self.car.y) + 10]
         # Need not worry about map boundry scenario as car is always kept 50 pixels away from the boundry in the get_reward function
         pixel_state = np.resize(pixel_state, (1, 40, 40))
+        #print("pixel_state",pixel_state)
+        norm = np.linalg.norm(last_signal)
+        last_signal = last_signal / norm
         print("last_signal", last_signal)
 
         full_state = [pixel_state, last_signal]
