@@ -10,15 +10,18 @@ Initially for 1000 time steps the car takes random action to fill the experience
 The car movement is not shown accurately in the output video since the screen recorder app was slowing down the program execution and display.
 
 
-### The State of the car 
+### The State of the car in CarEnv.py
 ##### CNN features:
-The the cut out of the sand/map corresponding to the position of the car is passed through a CNN model that is pretrained with MNIST dataset. The output features of the the MNIST layer would represent the position of the road. 
+* The the cut out of the sand/map corresponding to the position of the car is one of the inputs to the TD3. Now the TD3 has CNN layers to get features of this image crop within it.
 
-Alternatively I would have wanted to change the design such that the image of the sand and the car are super imposed and pased through, entirely without cropping, to a Network that is trained to process bigger images. That way the network learns the position of the car in the whole map. Its like using google maps for driving where we have the information of the whole map and the route.
+##### Other State parameters, 7 of them:
+* The position of the car: x ,y
+* The angle of the car, to add more information of the state to TD3: angle
+* The velocity of the car: Velocity xv, yv
+* The distance from the goal: xx, yy
 
-##### Other State parameters:
-Along with the output features of the MNIST layer we add the orientation of the car, the velocity of the car, to add more information of the state to TD3.
-
+##### TD3_NN
+Earlier the actor and critic had
 ### Action for the car:
 The Action is the output of the TD3 model is one value which represent the angle to be taken by the car. The value of the action represents the quantity of the action. Currently the speed on the sand and the road and kept fixed, just as before.
 Further I would have wanted to add the speed as another action parameter that should be predicted by the TD3 model.
