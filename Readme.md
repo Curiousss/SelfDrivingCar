@@ -37,7 +37,7 @@ The Car moves properly while taking random actions. Once the TD3 model is used t
 
 I think the number steps executed for random action is very less at present. That could also be a part of the reason for the car spin issue. Additionally the way the action is executed needs to be analysed for any bugs or improvements.
 
-
+[![Alt text](https://img.youtube.com/vi/OeCY7l4m44I/0.jpg)](https://www.youtube.com/watch?v=OeCY7l4m44I)
 ## Future corrections and improvements:
 There could be a lot of improvements to the defination of state, action, rewards, and how the value action predicted is executed in the environment. LSTMs can also be considered to use the temporal information of previous states/actions/positions to predict the future action.
 
