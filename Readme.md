@@ -12,7 +12,7 @@ The car movement is not shown accurately in the output video since the screen re
 
 ### The State of the car in CarEnv.py
 ##### CNN features:
-* The the cut out of the sand/map corresponding to the position of the car is one of the inputs to the TD3. Now the TD3 has CNN layers to get features of this image crop within it.
+* The the cut out of the sand/map corresponding to the position of the car is one of the inputs to the TD3. It shows the density and shape of the road around the car which can help in deciding the next action. Now the TD3 has CNN layers to get features of this image crop within it.
 
 ##### Other State parameters, 7 of them:
 * The position of the car: x ,y
@@ -21,7 +21,9 @@ The car movement is not shown accurately in the output video since the screen re
 * The distance from the goal: xx, yy
 
 ##### TD3_NN
-Earlier the actor and critic had
+Just as earlier the Actor model and Critic model has a couple of Fully connected layers with Relu activation for the hidden layers, and the Actor model also has a Tanh activation at the end. 
+Convolutional layers were added to process the image crop of the sand at the car position. Batch normalization was added to all the Convolutional layers and the Fully connected layers except the last one, it helped in getiing regularised output to some extent as opposed to earlier when the output of the Actor was always towards the extreme. 
+
 ### Action for the car:
 The Action is the output of the TD3 model is one value which represent the angle to be taken by the car. The value of the action represents the quantity of the action. Currently the speed on the sand and the road and kept fixed, just as before.
 Further I would have wanted to add the speed as another action parameter that should be predicted by the TD3 model.
