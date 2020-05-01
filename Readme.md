@@ -39,15 +39,20 @@ The rewards play a key role in how an agent learns using reinforcement. The rewa
 The exact value of the reward may not matter as much as the proportion of the reward given to each scenario. It may take an approach like grid search to reach a good reward system.
 
 ### Results:
-The Car moves properly while taking random actions. Once the TD3 model is used to predict the action the car just spins in one place. I suspect that resizing the cropped sand image to 28x28 is diminishing the information. The alternative solution is mentioned in the CNN features section earlier. 
+I have been testing only on my laptop which has just 8GB. It was difficult to move to any cloud environment since I found the dependencies of kivy package tricky. So I had to resize the size of the cropped image of the sand to 40x40 from 160x160.
+The Car moves properly while taking random actions. Once the TD3 model is used to predict the action sometimes the car spins or flutters. 
 
-I think the number steps executed for random action is very less at present. That could also be a part of the reason for the car spin issue. Additionally the way the action is executed needs to be analysed for any bugs or improvements.
 
 [![Alt text](https://img.youtube.com/vi/OeCY7l4m44I/0.jpg)](https://www.youtube.com/watch?v=OeCY7l4m44I)
 
 During training and inference the car sometimes spins, sometimes flutters and sometimes moves coherently.
 
-## Future corrections and improvements:
-There could be a lot of improvements to the defination of state, action, rewards, and how the value action predicted is executed in the environment. LSTMs can also be considered to use the temporal information of previous states/actions/positions to predict the future action.
+### LSTM
+LSTMs can also be considered to use the temporal information of previous states/actions/positions to predict the future action.
 
+### Open AI gym
 Initially I spent a lot of time trying to use open AI gym. I would like to further explore how that would help imrpove the design of this project.
+
+## Future corrections and improvements:
+There could be a lot of improvements to the defination of state, action, rewards, and how the value action predicted is executed in the environment. 
+
