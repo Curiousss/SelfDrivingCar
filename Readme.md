@@ -23,6 +23,7 @@ The car movement is not shown accurately in the output video since the screen re
 ##### TD3_NN
 Just as earlier the Actor model and Critic model has a couple of Fully connected layers with Relu activation for the hidden layers, and the Actor model also has a Tanh activation at the end. 
 Convolutional layers were added to process the image crop of the sand at the car position. Batch normalization was added to all the Convolutional layers and the Fully connected layers except the last one, it helped in getiing regularised output to some extent as opposed to earlier when the output of the Actor was always towards the extreme. 
+![alt text](CNN.png)![alt text](Actor.png)![alt text](Critic.png)
 
 ### Action for the car:
 The Action is the output of the TD3 model is one value which represent the angle to be taken by the car. The value of the action represents the quantity of the action. Currently the speed on the sand and the road and kept fixed, just as before.
