@@ -3,7 +3,7 @@
 ### GameMain.py:
 This is the main py file. Here the kivy environment of Assignment 7 was modified to use the T3D from Assignment 10, to drive the car on the map.
 The car is initialized in a random positions. 
-Initially for 1000 time steps the car takes random action to fill the experience replay buffer. For the next 10000 time steps the TD3 is trained. The model is used after 10000 timesteps for maximum 500000 steps.
+Initially for 10000 time steps the car takes random action to fill the experience replay buffer. For the next 10000 time steps the TD3 is trained. The model is used after 10000 timesteps for maximum 500000 steps.
 
 [![Alt text](https://img.youtube.com/vi/SO3KbC9EGHw/0.jpg)](https://www.youtube.com/watch?v=SO3KbC9EGHw)
 
@@ -14,9 +14,9 @@ The car movement is not shown accurately in the output video since the screen re
 ##### CNN features:
 * The the cut out of the sand/map corresponding to the position of the car is one of the inputs to the TD3. It shows the density and shape of the road around the car which can help in deciding the next action. Now the TD3 has CNN layers to get features of this image crop within it.
 
-##### Other State parameters, 7 of them:
+##### Other State parameters, 7 of them to add more information of the state to TD3:
 * The position of the car: x ,y
-* The angle of the car, to add more information of the state to TD3: angle
+* The angle of the car,  angle
 * The velocity of the car: Velocity xv, yv
 * The distance from the goal: xx, yy
 
