@@ -25,6 +25,8 @@ Just as earlier the Actor model and Critic model has a couple of Fully connected
 Convolutional layers were added to process the image crop of the sand at the car position. Batch normalization was added to all the Convolutional layers and the Fully connected layers except the last one, it helped in getiing regularised output to some extent as opposed to earlier when the output of the Actor was always towards the extreme. 
 ![alt text](CNN.png)![alt text](Actor.png)![alt text](Critic.png)
 
+Currently this design is not helping the Car agent learn. So this will be changed in the future.
+
 ### Action for the car:
 The Action is the output of the TD3 model is one value which represent the angle to be taken by the car. The value of the action represents the quantity of the action. Currently the speed on the sand and the road and kept fixed, just as before.
 Further I would have wanted to add the speed as another action parameter that should be predicted by the TD3 model.
@@ -48,12 +50,17 @@ The Car moves properly while taking random actions. Once the TD3 model is used t
 
 During training and inference the car sometimes spins, sometimes flutters and sometimes moves coherently.
 
+## Further improvements:
+There could be a lot of improvements to the design of what constitutes States, Actions and Rewards, and how the Action predicted is executed in the environment. The Car is not yet learning to stay on roads of reach the goal, so there are some issues with some parts of the code which needs to be corrected.
+
+## Things that were implemented previously:
+### Pretrained CNN:
+Currently the CNN is added into the Actor and the Critic itself so that the CNN learns along with the other layers of the TD3 which I think is unnecessary burden and the car is not even learning.
+Previously I have tried using a pretrained MNIST model it did not make difference since there are some issues with the basic design on States, Actions and Rewards.
+
 ### LSTM
-LSTMs can also be considered to use the temporal information of previous states/actions/positions to predict the future action.
+I tried to implement LSTMs to capture the movement of the car. It did not make any difference because there is some basic issue with the existing code which needs to be solved before implementing LSTMs. Hence this will be a future plan.
 
 ### Open AI gym
-Initially I spent a lot of time trying to use open AI gym. I would like to further explore how that would help imrpove the design of this project.
-
-## Future corrections and improvements:
-There could be a lot of improvements to the defination of state, action, rewards, and how the value action predicted is executed in the environment. 
+Initially I spent a lot of time trying to use open AI gym. I realized that would take more time so I kept it aside and worked with kivy only. I plan to pick up the open gym implementation again in the future.
 
